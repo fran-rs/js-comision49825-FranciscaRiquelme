@@ -1,11 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <script src="./main.js"></script>
-</body>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulador de Préstamos</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Simulador de Préstamos</h1>
+
+    <button id="simularBtn">Simular Préstamo</button>
+    <button id="listarBtn">Listar Préstamos</button>
+    <button id="filtrarMayorBtn">Filtrar > 5 Cuotas</button>
+    <button id="filtrarMenorBtn">Filtrar <= 5 Cuotas</button>
+
+    <table id="tablaPrestamos">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Préstamo</th>
+          <th>Cuota</th>
+          <th>Número de Cuotas</th>
+          <th>Monto Total a Pagar</th>
+        </tr>
+      </thead>
+      <tbody id="cuerpoTabla"></tbody>
+    </table>
+
+    <script src="main.js"></script>
+  </body>
 </html>
