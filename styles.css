@@ -6,9 +6,28 @@ body {
   margin: 0 auto;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 h1 {
-  text-align: center;
   color: #61dafb;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #61dafb;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 
 button {
@@ -25,7 +44,7 @@ button:hover {
 }
 
 table {
-  width: 80%;
+  width: 100%;
   margin: 20px 0;
   border-collapse: collapse;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);

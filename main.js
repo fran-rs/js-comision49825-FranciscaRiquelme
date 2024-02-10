@@ -1,13 +1,27 @@
-const prestamos = [];
+const prestamos = JSON.parse(localStorage.getItem("prestamos")) || [];
 
 function calcularTasaDeInteres(nCuotas) {
   return nCuotas >= 6 ? 0.6 : 0.5;
 }
 
 function simularPrestamo() {
-  const nombre = prompt("Ingrese su nombre");
-  const montoTotal = Number(prompt("Ingrese el monto del préstamo"));
-  const numeroCuotas = Number(prompt("Ingrese número de cuotas del préstamo"));
+  const nombreInput = document.getElementById("nombre");
+  const montoInput = document.getElementById("monto");
+  const cuotasInput = document.getElementById("cuotas");
+
+  const nombre = nombreInput.value;
+  const montoTotal = Number(montoInput.value);
+  const numeroCuotas = Number(cuotasInput.value);
+
+  // Validar que el número de cuotas sea positivo
+  if (numeroCuotas <= 0) {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "El número de cuotas debe ser mayor que cero",
+    });
+    return;
+  }
 
   const tasaInteres = calcularTasaDeInteres(numeroCuotas);
 
@@ -24,8 +38,15 @@ function simularPrestamo() {
   };
 
   prestamos.push(usuario);
+  localStorage.setItem("prestamos", JSON.stringify(prestamos));
 
-  alert("Préstamo simulado con éxito");
+  Swal.fire({
+    icon: "success",
+    title: "¡Préstamo simulado con éxito!",
+  }).then(() => {
+    // Actualizar la tabla después de presionar aceptar en SweetAlert
+    listarPrestamos();
+  });
 }
 
 function listarPrestamos() {
@@ -35,10 +56,10 @@ function listarPrestamos() {
   prestamos.forEach((usuario) => {
     const fila = document.createElement("tr");
     fila.innerHTML = `<td>${usuario.nombre}</td>
-                          <td>${usuario.monto}</td>
-                          <td>${usuario.cuota}</td>
-                          <td>${usuario.cuotas}</td>
-                          <td>${usuario.totalPagar}</td>`;
+                      <td>${usuario.monto}</td>
+                      <td>${usuario.cuota}</td>
+                      <td>${usuario.cuotas}</td>
+                      <td>${usuario.totalPagar}</td>`;
     cuerpoTabla.appendChild(fila);
   });
 }
@@ -51,14 +72,36 @@ function filtrarPorCuotas(cuotasCondicion) {
     if (cuotasCondicion(usuario.cuotas)) {
       const fila = document.createElement("tr");
       fila.innerHTML = `<td>${usuario.nombre}</td>
-                            <td>${usuario.monto}</td>
-                            <td>${usuario.cuota}</td>
-                            <td>${usuario.cuotas}</td>
-                            <td>${usuario.totalPagar}</td>`;
+                        <td>${usuario.monto}</td>
+                        <td>${usuario.cuota}</td>
+                        <td>${usuario.cuotas}</td>
+                        <td>${usuario.totalPagar}</td>`;
       cuerpoTabla.appendChild(fila);
     }
   });
 }
+
+// Función para obtener la hora actual utilizando Fetch
+async function obtenerHora() {
+  try {
+    const response = await fetch("https://worldtimeapi.org/api/ip");
+    const data = await response.json();
+    const hora = data.datetime.slice(11, 19); // Extraer solo la hora
+    const pais = data.timezone.split("/")[1]; // Obtener el nombre del país
+    document.getElementById("hora").textContent = `Hora actual: ${hora} (${pais})`;
+  } catch (error) {
+    console.error("Error al obtener la hora:", error);
+  }
+}
+
+// Llamar a la función para obtener la hora al cargar la página
+obtenerHora();
+
+// Actualizar la hora cada segundo
+setInterval(obtenerHora, 1000);
+
+// Mostrar los préstamos almacenados al cargar la página
+listarPrestamos();
 
 const simularBtn = document.getElementById("simularBtn");
 const listarBtn = document.getElementById("listarBtn");
@@ -73,4 +116,3 @@ filtrarMayorBtn.addEventListener("click", () =>
 filtrarMenorBtn.addEventListener("click", () =>
   filtrarPorCuotas((cuotas) => cuotas <= 5)
 );
-
